@@ -1,0 +1,110 @@
+version: '3'
+services:
+  backend:
+    container_name: fullstack_backend
+    build:
+      context: ./docker/nestjs
+    volumes:
+      - ./backend:/usr/src/fullstack-app/backend
+    restart: always
+    environment:
+      NODE_ENV: development
+      DEBUG: nodejs-docker-express:*
+    networks:
+      - default
+  frontend:
+    container_name: fullstack_frontend
+    build:
+      context: ./docker/react
+    volumes:
+      - ./frontend:/usr/src/fullstack-app/frontend
+    restart: always
+    environment:
+      NODE_ENV: development
+      DEBUG: nodejs-docker-express:*
+    networks:
+      - default
+  mysql:
+    image: mysql:8.0
+    container_name: fullstack_mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    ports:
+      - 3308:3306
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fullstack
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: 123456
+    networks: 
+      - default
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: fullstack_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - 8668:80
+    depends_on: 
+      - mysql
+    environment:
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+      - UPLOAD_LIMIT=64M
+    networks: 
+      - default
+  nginx_backend:
+    image: nginx:latest
+    container_name: fullstack_backend_nginx
+    volumes: 
+      - .:/usr/src/fullstack-app/backend
+      - ./docker/nginx/nginx_backend_log:/var/log/nginx
+      - ./docker/nginx/backend.conf:/etc/nginx/conf.d/backend.conf
+    ports:
+      - "81:80"
+    networks:
+      - default
+  nginx_frontend:
+    image: nginx:latest
+    container_name: fullstack_frontend_nginx
+    volumes: 
+      - .:/usr/src/fullstack-app/frontend
+      - ./docker/nginx/nginx_frontend_log:/var/log/nginx
+      - ./docker/nginx/frontend.conf:/etc/nginx/conf.d/frontend.conf
+    ports:
+      - "85:80"
+    networks:
+      - default
+  redis:
+    image: redis:5-alpine
+    container_name: fullstack_redis
+    volumes: 
+      - ./docker/redis:/data
+    restart: unless-stopped
+    ports: 
+      - 6379:6379
+    networks: 
+      - default
+  localstack:
+    image: localstack/localstack
+    container_name: fullstack_localstack
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+      - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
+    environment:
+      - SERVICES=${SERVICES- }
+      - DEBUG=${DEBUG- }
+      - DATA_DIR=${DATA_DIR- }
+      - PORT_WEB_UI=${PORT_WEB_UI- }
+      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
+      - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+networks:
+  default:
+    driver: bridge

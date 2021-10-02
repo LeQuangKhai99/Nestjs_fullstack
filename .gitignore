@@ -1,0 +1,7 @@
+/docker/mysql
+/docker/nginx/nginx_frontend_log
+/docker/nginx/nginx_backend_log
+/docker/redis
+/backend/dist
+/backend/node_modules
+/frontend/node_modules
