@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-10-03T03:09:52.747Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36" etag="xVr1gZILG8ibUG_w9OVB" version="15.4.1" type="github">
+<mxfile host="app.diagrams.net" modified="2021-10-03T03:12:42.540Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36" etag="gKAmbfinDm2r1EEKlRUm" version="15.4.1" type="github">
   <diagram id="6OmSFfkwX89OONU2K9B_" name="Usecase tổng quát">
     <mxGraphModel dx="1422" dy="920" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -11,10 +11,10 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="CkkVm7YenpbbgUDBb8Ox-2" value="Manager" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="80" y="200" width="30" height="60" as="geometry" />
+          <mxGeometry x="80" y="390" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="CkkVm7YenpbbgUDBb8Ox-3" value="Root" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="100" y="640" width="30" height="60" as="geometry" />
+          <mxGeometry x="80" y="650" width="30" height="60" as="geometry" />
         </mxCell>
         <mxCell id="CkkVm7YenpbbgUDBb8Ox-17" value="Đăng nhập với tài khoản mặc định" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="530" y="890" width="120" height="50" as="geometry" />
