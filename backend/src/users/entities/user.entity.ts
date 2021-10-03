@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Timestamp, UpdateDateColumn } from "typeorm";
+import { Role } from "src/roles/entities/role.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Timestamp, UpdateDateColumn } from "typeorm";
 
-@Entity("Users")
+@Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -13,6 +14,18 @@ export class User {
 
   @Column()
   password: string;
+
+  @Column()
+  avatar: string;
+
+  @Column({default: false})
+  active: boolean;
+
+  @Column({default: null})
+  token: string;
+
+  @ManyToOne(type => Role, role => role.user)
+  role: Role;
 
   @CreateDateColumn()
   created_at: Timestamp;
