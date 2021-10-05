@@ -11,6 +11,8 @@ import { User } from './entities/user.entity';
     ])
   ],
   controllers: [UsersController],
-  providers: [UsersService]
+  providers: [UsersService],
+  // khi depen service vao module khac
+  exports: [UsersService]
 })
 export class UsersModule {}
