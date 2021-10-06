@@ -9,8 +9,11 @@ export class Role {
   @Column()
   name: string;
 
+  @Column({type: 'json'})
+  permissions: string;
+
   @OneToMany(type => User, user => user.role)
-  user: User[];
+  users: User[];
 
   @CreateDateColumn()
   created_at: Timestamp;

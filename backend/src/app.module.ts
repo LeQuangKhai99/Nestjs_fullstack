@@ -8,6 +8,9 @@ import { ConfigModule } from '@nestjs/config';
 import { RolesModule } from './roles/roles.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
+import { DepartmentsModule } from './departments/departments.module';
+import { CalendersModule } from './calenders/calenders.module';
+import { RequestsModule } from './requests/requests.module';
 
 @Module({
   controllers: [AppController],
@@ -31,9 +34,12 @@ import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
       database: process.env.DATABASE_NAME,
       entities: ["dist/**/*.entity{.ts,.js}"],
       autoLoadEntities: true,
-      synchronize: false,
+      synchronize: true,
     }),
-    RolesModule
+    RolesModule,
+    DepartmentsModule,
+    CalendersModule,
+    RequestsModule
   ],
 })
 export class AppModule {}

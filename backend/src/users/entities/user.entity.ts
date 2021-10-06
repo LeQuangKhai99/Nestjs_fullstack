@@ -1,5 +1,8 @@
+import { Calender } from "src/calenders/entities/calender.entity";
+import { Department } from "src/departments/entities/department.entity";
+import { Request } from "src/requests/entities/request.entity";
 import { Role } from "src/roles/entities/role.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Timestamp, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -15,7 +18,7 @@ export class User {
   @Column()
   password: string;
 
-  @Column()
+  @Column({default: null})
   avatar: string;
 
   @Column({default: false})
@@ -24,8 +27,44 @@ export class User {
   @Column({default: null})
   token: string;
 
-  @ManyToOne(type => Role, role => role.user)
+  @Column({default: null})
+  tokenExpired: Date;
+
+  @Column({default: null})
+  address: string;
+
+  @Column({default: 0})
+  gender: boolean;
+
+  @Column({default: null})
+  joinCompanyAt: Date;
+
+  @Column({default: null})
+  macAddress: string;
+
+  @Column({default: null})
+  dateOfBirth: Date;
+
+  @Column({type: 'json'})
+  constract: string;
+
+  @Column({type: 'json'})
+  device: string;
+
+  @ManyToOne(type => Role, role => role.users)
   role: Role;
+
+  @ManyToOne(type => Department, department => department.users)
+  department: Department;
+
+  @OneToMany(type => Calender, calender => calender.user)
+  calenders: Calender[];
+
+  @OneToMany(type => Request, request => request.userSend)
+  requestSends: Request;
+
+  @OneToMany(type => Request, request => request.userApprove)
+  requestApproves: Request;
 
   @CreateDateColumn()
   created_at: Date;
