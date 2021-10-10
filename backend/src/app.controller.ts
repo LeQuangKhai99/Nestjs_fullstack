@@ -1,6 +1,7 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
-import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
+import { Roles } from './auth/decorators/roles.decorator';
+import { Role } from './auth/enum/role.enum';
 
 @Controller()
 export class AppController {
@@ -11,6 +12,7 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Roles(Role.Admin)
   @Get('profile')
   prodile(@Req() req) {
     return req.user;

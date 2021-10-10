@@ -1,3 +1,4 @@
+import { Article } from "src/articles/entities/article.entity";
 import { Calender } from "src/calenders/entities/calender.entity";
 import { Department } from "src/departments/entities/department.entity";
 import { Request } from "src/requests/entities/request.entity";
@@ -65,6 +66,9 @@ export class User {
 
   @OneToMany(type => Request, request => request.userApprove)
   requestApproves: Request;
+
+  @OneToMany(type => Article, article => article.id)
+  articles: Article[];
 
   @CreateDateColumn()
   created_at: Date;

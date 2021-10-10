@@ -36,7 +36,12 @@ export class UsersService {
 
   findByEmail(email: string) {
     return this.userRepo.findOne({
-      email
+      where: [
+        {
+          email
+        } 
+      ],
+      relations: ['role']
     });
   }
 

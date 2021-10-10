@@ -11,6 +11,9 @@ import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 import { DepartmentsModule } from './departments/departments.module';
 import { CalendersModule } from './calenders/calenders.module';
 import { RequestsModule } from './requests/requests.module';
+import { RolesGuard } from './auth/guard/roles.guard';
+import { ArticlesModule } from './articles/articles.module';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   controllers: [AppController],
@@ -19,6 +22,10 @@ import { RequestsModule } from './requests/requests.module';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard
     }
   ],
   imports: [
@@ -39,7 +46,9 @@ import { RequestsModule } from './requests/requests.module';
     RolesModule,
     DepartmentsModule,
     CalendersModule,
-    RequestsModule
+    RequestsModule,
+    ArticlesModule,
+    CaslModule
   ],
 })
 export class AppModule {}
