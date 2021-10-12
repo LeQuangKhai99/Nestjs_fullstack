@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
-import { Public } from 'src/common/decorators/public.decorator';
-import { Action } from 'src/common/enum/action.enum';
-import { User } from 'src/users/entities/user.entity';
+import { CaslAbilityFactory } from '../casl/casl-ability.factory';
+import { Public } from '../common/decorators/public.decorator';
+import { Action } from '../common/enum/action.enum';
+import { User } from '../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';

@@ -1,8 +1,8 @@
-import { Article } from "src/articles/entities/article.entity";
-import { Calender } from "src/calenders/entities/calender.entity";
-import { Department } from "src/departments/entities/department.entity";
-import { Request } from "src/requests/entities/request.entity";
-import { Role } from "src/roles/entities/role.entity";
+import { Article } from "../../articles/entities/article.entity";
+import { Calender } from "../../calenders/entities/calender.entity";
+import { Department } from "../../departments/entities/department.entity";
+import { Request } from "../../requests/entities/request.entity";
+import { Role } from "../../roles/entities/role.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()

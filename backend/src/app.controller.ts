@@ -2,12 +2,14 @@ import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Roles } from './auth/decorators/roles.decorator';
 import { Role } from './auth/enum/role.enum';
+import { Public } from './common/decorators/public.decorator';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
+  @Public()
   getHello(): string {
     return this.appService.getHello();
   }
