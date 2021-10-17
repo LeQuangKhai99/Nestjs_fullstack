@@ -1,15 +1,20 @@
+import { MailService } from './../mail/mail.service';
+import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import * as faker from 'faker';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepo: Repository<User>
+    private readonly userRepo: Repository<User>,
+    private mailService: MailService
   ){}
   async create(createUserDto: CreateUserDto) {
     const user = await this.userRepo.findOne({
@@ -22,7 +27,18 @@ export class UsersService {
       })
     }
     
-    const newUser = await this.userRepo.create(createUserDto);
+    const token = await bcrypt.hash(`full-stack-token-${createUserDto.email}`, 10);
+    const newDto = {
+      ...createUserDto,
+      password: await bcrypt.hash('abc', 10),
+      avatar: faker.image.avatar(),
+      active: false,
+      token: token,
+      tokenExpired: new Date(Date.now() + (1000 * 60 * 30))
+    }
+    const newUser = await this.userRepo.create(newDto);
+
+    await this.mailService.sendUserConfirmation(newUser, token);
     return this.userRepo.save(newUser);
   }
 

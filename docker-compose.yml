@@ -110,6 +110,17 @@ services:
       - "85:80"
     networks:
       - default
+  mailhog:
+    image: mailhog/mailhog
+    container_name: fullstack_mailhog
+    tty: true
+    logging:
+      driver: 'none'
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+    networks: 
+      - default
   redis:
     image: redis:5-alpine
     container_name: fullstack_redis

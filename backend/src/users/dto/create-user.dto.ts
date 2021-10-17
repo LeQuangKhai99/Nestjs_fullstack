@@ -8,5 +8,23 @@ export class CreateUserDto {
   username: string;
 
   @IsNotEmpty()
-  password: string;
+  address: string;
+
+  @IsNotEmpty()
+  gender: boolean;
+
+  @IsNotEmpty()
+  joinCompanyAt: Date;
+
+  @IsNotEmpty()
+  macAddress: string;
+
+  @IsNotEmpty()
+  dateOfBirth: Date;
+
+  @IsNotEmpty()
+  constract: string;
+
+  @IsNotEmpty()
+  device: string;
 }
