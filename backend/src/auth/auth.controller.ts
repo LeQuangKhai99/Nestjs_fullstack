@@ -4,7 +4,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Quer
 import { Public } from '../common/decorators/public.decorator';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guard/local-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
