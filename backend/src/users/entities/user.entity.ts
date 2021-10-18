@@ -25,6 +25,9 @@ export class User {
   @Column({default: false})
   active: boolean;
 
+  @Column({default: false})
+  changePass: boolean;
+
   @Column({default: null})
   token: string;
 

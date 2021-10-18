@@ -1,3 +1,4 @@
+import { ResetPasswordDto } from './dto/reset-password-user.dto';
 import { ActiveUserDto } from './dto/active-user.dto';
 import { MailService } from './../mail/mail.service';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -69,7 +70,6 @@ export class UsersService {
       token: activeUserDto.token,
       email: activeUserDto.email
     });
-    console.log(user);
     
     if(!user) {
       throw new NotFoundException({message: "Info error"})
@@ -120,6 +120,24 @@ export class UsersService {
     }
     
     return this.userRepo.save(newUser);
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto) {
+    const token = await bcrypt.hash(`full-stack-token-${Date.now() + faker.random.words()}`, 10);
+    resetPasswordDto.ids.forEach(async (id) => {
+      const newUser = await this.userRepo.preload({
+        id,
+        password: await bcrypt.hash('abc', 10),
+        token,
+        changePass: false
+      });
+      if(newUser) {
+        this.userRepo.save(newUser);
+      }
+
+      await this.mailService.sendUserResetPassword(newUser, token);
+    })
+    return {"message": "reset success"};
   }
 
   async remove(id: number) {

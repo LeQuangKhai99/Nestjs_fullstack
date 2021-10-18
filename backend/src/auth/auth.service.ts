@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -22,6 +22,13 @@ export class AuthService {
   }
 
   async login(user: any) {
+    if(!user.active) {
+      throw new UnauthorizedException({message: "Account unactive"})
+    }
+
+    if(!user.changePass) {
+      throw new UnauthorizedException({message: "Please change password first"});
+    }
     const {password, ...userInfo} = user;
     return {
       access_token: this.jwtService.sign(userInfo),

@@ -20,4 +20,19 @@ export class MailService {
       },
     });
   }
+
+  async sendUserResetPassword(user: User, token: string) {
+    const url = `http://fullstack.backend.test:81/auth/confirm?token=${token}&email=${user.email}&id=${user.id}`;
+
+    await this.mailerService.sendMail({
+      to: user.email,
+      // from: '"Support Team" <support@example.com>', // override default from
+      subject: 'Reset password success! Confirm your Email',
+      template: './reset-password.ejs', // `.hbs` extension is appended automatically
+      context: { // ✏️ filling curly brackets with content
+        name: user.username,
+        url,
+      },
+    });
+  } 
 }

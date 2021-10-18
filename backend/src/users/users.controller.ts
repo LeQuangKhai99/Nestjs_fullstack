@@ -1,3 +1,4 @@
+import { ResetPasswordDto } from './dto/reset-password-user.dto';
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -12,6 +13,13 @@ export class UsersController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
+  }
+
+  @Patch('reset-password')
+  resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
+    console.log(resetPasswordDto);
+    
+    return this.usersService.resetPassword(resetPasswordDto);
   }
 
   @Get()
