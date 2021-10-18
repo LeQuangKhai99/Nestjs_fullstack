@@ -7,7 +7,7 @@ export class MailService {
   constructor(private mailerService: MailerService) {}
 
   async sendUserConfirmation(user: User, token: string) {
-    const url = `example.com/auth/confirm?token=${token}`;
+    const url = `http://fullstack.backend.test:81/auth/confirm?token=${token}&email=${user.email}&id=${user.id}`;
 
     await this.mailerService.sendMail({
       to: user.email,

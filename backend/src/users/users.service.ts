@@ -1,3 +1,4 @@
+import { ActiveUserDto } from './dto/active-user.dto';
 import { MailService } from './../mail/mail.service';
 import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
@@ -38,8 +39,9 @@ export class UsersService {
     }
     const newUser = await this.userRepo.create(newDto);
 
-    await this.mailService.sendUserConfirmation(newUser, token);
-    return this.userRepo.save(newUser);
+    const userx = await this.userRepo.save(newUser);
+    await this.mailService.sendUserConfirmation(userx, token);
+    return userx;
   }
 
   findAll() {
@@ -50,8 +52,8 @@ export class UsersService {
     return this.userRepo.findOne(id);
   }
 
-  findByEmail(email: string) {
-    return this.userRepo.findOne({
+  async findByEmail(email: string) {
+    return await this.userRepo.findOne({
       where: [
         {
           email
@@ -59,6 +61,33 @@ export class UsersService {
       ],
       relations: ['role']
     });
+  }
+
+  async activeUser(activeUserDto: ActiveUserDto) {
+    const user = await this.userRepo.findOne({
+      id: activeUserDto.id,
+      token: activeUserDto.token,
+      email: activeUserDto.email
+    });
+    console.log(user);
+    
+    if(!user) {
+      throw new NotFoundException({message: "Info error"})
+    }
+
+    if(user.active) {
+      throw new BadRequestException({message: "Account actived"});
+    }
+    const exprired = new Date(user.tokenExpired);
+    if(exprired.getTime() < Date.now()){
+      throw new BadRequestException({message: "Authentication time has expired"})
+    }
+
+    const newUser = await this.userRepo.preload({
+      id: +activeUserDto.id,
+      active: true
+    });
+    return await this.userRepo.save(newUser);
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
