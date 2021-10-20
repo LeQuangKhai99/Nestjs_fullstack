@@ -21,6 +21,7 @@ import { User } from 'src/users/entities/user.entity';
       signOptions: {expiresIn: '30d'}
     })
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy]
+  providers: [AuthService, LocalStrategy, JwtStrategy],
+  exports: [AuthService]
 })
 export class AuthModule {}

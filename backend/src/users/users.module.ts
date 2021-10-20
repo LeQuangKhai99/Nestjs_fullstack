@@ -1,3 +1,4 @@
+import { AuthModule } from './../auth/auth.module';
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
@@ -10,7 +11,7 @@ import { MailModule } from 'src/mail/mail.module';
     MailModule,
     TypeOrmModule.forFeature([
       User
-    ])
+    ]),
   ],
   controllers: [UsersController],
   providers: [UsersService],

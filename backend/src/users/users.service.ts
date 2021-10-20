@@ -1,3 +1,5 @@
+import { AuthService } from './../auth/auth.service';
+import { ChangePasswordDto } from './dto/changepas-user.dto';
 import { ResetPasswordDto } from './dto/reset-password-user.dto';
 import { ActiveUserDto } from './dto/active-user.dto';
 import { MailService } from './../mail/mail.service';
@@ -129,7 +131,9 @@ export class UsersService {
         id,
         password: await bcrypt.hash('abc', 10),
         token,
-        changePass: false
+        changePass: false,
+        active: false,
+        tokenExpired: new Date(Date.now() + (1000 * 60 * 30))
       });
       if(newUser) {
         this.userRepo.save(newUser);
@@ -138,6 +142,27 @@ export class UsersService {
       await this.mailService.sendUserResetPassword(newUser, token);
     })
     return {"message": "reset success"};
+  }
+
+  async changePassword(changePassword: ChangePasswordDto) {
+    const {email, password, newPassword, confirmPassword} = changePassword;
+    const user = await this.findByEmail(email);
+
+    if (user && await bcrypt.compare(password, user.password)) {
+      
+      if(newPassword === confirmPassword) {
+        let newUser = await this.userRepo.preload({
+          id: user.id,
+          password: await bcrypt.hash(confirmPassword, 10),
+          changePass: true
+        });
+
+        this.userRepo.save(newUser);
+        return {message: "Change pass success"}
+      }
+      throw new BadRequestException({message: "Confirm password not match with new password"});
+    }
+    throw new BadRequestException({message: "Username or password fail"});
   }
 
   async remove(id: number) {
