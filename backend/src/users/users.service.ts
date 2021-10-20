@@ -1,9 +1,7 @@
-import { AuthService } from './../auth/auth.service';
 import { ChangePasswordDto } from './dto/changepas-user.dto';
 import { ResetPasswordDto } from './dto/reset-password-user.dto';
 import { ActiveUserDto } from './dto/active-user.dto';
 import { MailService } from './../mail/mail.service';
-import { MailerService } from '@nestjs-modules/mailer';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -18,7 +16,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
-    private mailService: MailService
+    private mailService: MailService,
   ){}
   async create(createUserDto: CreateUserDto) {
     const user = await this.userRepo.findOne({
