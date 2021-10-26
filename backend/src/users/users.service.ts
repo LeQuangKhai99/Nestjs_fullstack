@@ -1,8 +1,9 @@
+import { Calender } from './../calenders/entities/calender.entity';
 import { ChangePasswordDto } from './dto/changepas-user.dto';
 import { ResetPasswordDto } from './dto/reset-password-user.dto';
 import { ActiveUserDto } from './dto/active-user.dto';
 import { MailService } from './../mail/mail.service';
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, Req } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -10,6 +11,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as faker from 'faker';
 import * as bcrypt from 'bcrypt';
+import { Request } from 'src/requests/entities/request.entity';
 
 @Injectable()
 export class UsersService {

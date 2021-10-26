@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CalendersService } from './calenders.service';
 import { CreateCalenderDto } from './dto/create-calender.dto';
@@ -9,28 +9,13 @@ import { UpdateCalenderDto } from './dto/update-calender.dto';
 export class CalendersController {
   constructor(private readonly calendersService: CalendersService) {}
 
-  @Post()
-  create(@Body() createCalenderDto: CreateCalenderDto) {
-    return this.calendersService.create(createCalenderDto);
+  @Post('check-in')
+  checkIn(@Req() req) {
+    return this.calendersService.checkIn(req);
   }
 
-  @Get()
-  findAll() {
-    return this.calendersService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.calendersService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCalenderDto: UpdateCalenderDto) {
-    return this.calendersService.update(+id, updateCalenderDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.calendersService.remove(+id);
+  @Patch('check-out')
+  checkOut(@Req() req) {
+    return this.calendersService.checkOut(req);
   }
 }

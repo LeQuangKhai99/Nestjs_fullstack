@@ -6,17 +6,17 @@ export class Calender {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({default: null})
   checkinAt: Date;
 
-  @Column()
+  @Column({default: null})
   checkoutAt: Date;
 
   @Column()
   year: number;
 
   @Column()
-  mounth: number;
+  month: number;
 
   @Column()
   day: number;
