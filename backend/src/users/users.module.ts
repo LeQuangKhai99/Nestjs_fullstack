@@ -1,3 +1,4 @@
+import { Department } from 'src/departments/entities/department.entity';
 import { AuthModule } from './../auth/auth.module';
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -10,7 +11,8 @@ import { MailModule } from 'src/mail/mail.module';
   imports: [
     MailModule,
     TypeOrmModule.forFeature([
-      User
+      User,
+      Department
     ]),
   ],
   controllers: [UsersController],

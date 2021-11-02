@@ -1,3 +1,5 @@
+import { Department } from 'src/departments/entities/department.entity';
+import { DepartmentsService } from './../departments/departments.service';
 import { Calender } from './../calenders/entities/calender.entity';
 import { ChangePasswordDto } from './dto/changepas-user.dto';
 import { ResetPasswordDto } from './dto/reset-password-user.dto';
@@ -19,6 +21,8 @@ export class UsersService {
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
     private mailService: MailService,
+    @InjectRepository(Department)
+    private departmentRepo: Repository<Department>
   ){}
   async create(createUserDto: CreateUserDto) {
     const user = await this.userRepo.findOne({
@@ -173,5 +177,23 @@ export class UsersService {
       });
     }
     return this.userRepo.remove(user);
+  }
+
+  async employees(@Req() req) {
+    const department = await this.departmentRepo.findOne({
+      where: {
+        manage: req.user
+      }
+    });
+
+    if(!department) {
+      throw new NotFoundException({"message": "You are not manager"})
+    }
+
+    return await this.userRepo.find({
+      where: {
+        department: department
+      }
+    });
   }
 }
