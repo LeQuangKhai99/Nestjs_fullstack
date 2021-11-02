@@ -1,3 +1,4 @@
+import { Calender } from './../calenders/entities/calender.entity';
 import { UsersService } from './../users/users.service';
 import { User } from './../users/entities/user.entity';
 import { Department } from './entities/department.entity';
@@ -9,7 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Department, User])
+    TypeOrmModule.forFeature([Department, User, Calender])
   ],
   controllers: [DepartmentsController],
   providers: [DepartmentsService, UsersService], 

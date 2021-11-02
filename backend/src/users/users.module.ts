@@ -1,3 +1,4 @@
+import { Calender } from './../calenders/entities/calender.entity';
 import { Department } from 'src/departments/entities/department.entity';
 import { AuthModule } from './../auth/auth.module';
 import { Module } from '@nestjs/common';
@@ -12,7 +13,8 @@ import { MailModule } from 'src/mail/mail.module';
     MailModule,
     TypeOrmModule.forFeature([
       User,
-      Department
+      Department,
+      Calender
     ]),
   ],
   controllers: [UsersController],
