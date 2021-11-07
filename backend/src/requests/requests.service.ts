@@ -1,4 +1,4 @@
-import { Injectable, Req, BadRequestException } from '@nestjs/common';
+import { Injectable, Req, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import e from 'express';
 import { Repository } from 'typeorm';
@@ -98,8 +98,17 @@ export class RequestsService {
     return `This action returns a #${id} request`;
   }
 
-  update(id: number, updateRequestDto: UpdateRequestDto) {
-    return `This action updates a #${id} request`;
+  async update(id: number, updateRequestDto: UpdateRequestDto) {
+    const request = await this.requestRepo.preload({
+      id,
+      status: true
+    });
+
+    if(!request) {
+      throw new NotFoundException({"message": "Request not found"});
+    }
+
+    return this.requestRepo.save(request);
   }
 
   remove(id: number) {

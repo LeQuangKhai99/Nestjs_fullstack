@@ -6,10 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { CalendersService } from './calenders.service';
 import { CalendersController } from './calenders.controller';
+import { Request } from 'src/requests/entities/request.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Calender, User, Department])
+    TypeOrmModule.forFeature([Calender, User, Department, Request])
   ],
   controllers: [CalendersController],
   providers: [CalendersService, UsersService]

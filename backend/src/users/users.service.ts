@@ -14,6 +14,7 @@ import * as faker from 'faker';
 import * as bcrypt from 'bcrypt';
 import * as xlsx from 'xlsx';
 import * as path from 'path';
+import { Request } from 'src/requests/entities/request.entity';
 
 @Injectable()
 export class UsersService {
@@ -24,7 +25,9 @@ export class UsersService {
     @InjectRepository(Department)
     private departmentRepo: Repository<Department>,
     @InjectRepository(Calender)
-    private calenderRepo: Repository<Calender>
+    private calenderRepo: Repository<Calender>,
+    @InjectRepository(Request)
+    private requestRepo: Repository<Request>
   ){}
   async create(createUserDto: CreateUserDto) {
     const user = await this.userRepo.findOne({
@@ -288,5 +291,46 @@ export class UsersService {
     });
 
     this.exportExcel(data, workSheetColumnNames, workSheetName, filePath);
+  }
+
+  async confirmRequest(@Req() req, id: number) {
+    const request = await this.requestRepo.findOne({
+      relations: ['userSend'],
+      where: {
+        id: +id
+      }
+    });
+    
+    if(!request) {
+      throw new NotFoundException({"message": "Request not found"});
+    }
+
+    if(req.user.role.name !== 'root') {
+      const department = await this.departmentRepo.findOne({
+        relations: ['users'],
+        where: {
+          manage: req.user,
+        }
+      });
+  
+      if(!department) {
+        throw new BadRequestException({"message": "You are not manager"});
+      }
+
+      const listUser = department.users.map((user) => {
+        return user.id;
+      });
+      
+      if(!listUser.includes(request.userSend.id)) {
+        throw new BadRequestException({"message": "You are not manage this user"});
+      }
+    }
+
+    const newRequest = await this.requestRepo.preload({
+      id: +id,
+      status: true,
+      userApprove: req.user.id
+    });
+    return this.requestRepo.save(newRequest);
   }
 }

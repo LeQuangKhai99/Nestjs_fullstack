@@ -37,6 +37,11 @@ export class UsersController {
     return this.usersService.changePassword(changePasswordDto);
   }
 
+  @Patch('confirm-request/:id')
+  confirmRequest(@Req() req, @Param('id') id: number) {
+    return this.usersService.confirmRequest(req, id);
+  }
+
   @Get()
   findAll() {
     return this.usersService.findAll();

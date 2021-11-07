@@ -7,6 +7,7 @@ import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { MailModule } from 'src/mail/mail.module';
+import { Request } from 'src/requests/entities/request.entity';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { MailModule } from 'src/mail/mail.module';
     TypeOrmModule.forFeature([
       User,
       Department,
-      Calender
+      Calender,
+      Request
     ]),
   ],
   controllers: [UsersController],
