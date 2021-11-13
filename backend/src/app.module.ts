@@ -14,6 +14,8 @@ import { RequestsModule } from './requests/requests.module';
 import { RolesGuard } from './auth/guard/roles.guard';
 import { ArticlesModule } from './articles/articles.module';
 import { CaslModule } from './casl/casl.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   controllers: [AppController],
@@ -30,6 +32,9 @@ import { CaslModule } from './casl/casl.module';
   ],
   imports: [
     ConfigModule.forRoot(),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
     AuthModule, 
     UsersModule,
     TypeOrmModule.forRoot({

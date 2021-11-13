@@ -1,11 +1,14 @@
 import { ChangePasswordDto } from './dto/changepas-user.dto';
 import { ResetPasswordDto } from './dto/reset-password-user.dto';
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, Req, Res, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/common/decorators/public.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { customFileName } from 'src/common/custom-file-name';
 
 @ApiTags('Users')
 @Controller('users')
@@ -22,10 +25,24 @@ export class UsersController {
     return this.usersService.export(req, res);
   }
 
+  // @Post()
+  // create(@Body() createUserDto: CreateUserDto) {
+  //   return this.usersService.create(createUserDto);
+  // }
+
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination:'./public/upload/avatar',
+        filename:customFileName
+      }),
+    })
+  )
+  create(@Body() createUserDto: CreateUserDto, @UploadedFile() file) {
+    return this.usersService.create(createUserDto, file);
   }
+
 
   @Patch('reset-password')
   resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {

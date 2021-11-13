@@ -29,7 +29,7 @@ export class UsersService {
     @InjectRepository(Request)
     private requestRepo: Repository<Request>
   ){}
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto, file) {
     const user = await this.userRepo.findOne({
       email: createUserDto.email
     })
@@ -40,11 +40,14 @@ export class UsersService {
       })
     }
     
+    const arr =  file.path.split('/');
+    arr.splice(0, 1);
+
     const token = await bcrypt.hash(`full-stack-token-${createUserDto.email}`, 10);
     const newDto = {
       ...createUserDto,
       password: await bcrypt.hash('abc', 10),
-      avatar: faker.image.avatar(),
+      avatar: arr.join('/'),
       active: false,
       token: token,
       tokenExpired: new Date(Date.now() + (1000 * 60 * 30))
