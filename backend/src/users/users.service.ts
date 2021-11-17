@@ -29,34 +29,35 @@ export class UsersService {
     @InjectRepository(Request)
     private requestRepo: Repository<Request>
   ){}
-  async create(createUserDto: CreateUserDto, file) {
-    const user = await this.userRepo.findOne({
-      email: createUserDto.email
-    })
-
-    if(user) {
-      throw new BadRequestException({
-        "message": "email registered"
-      })
-    }
+  async create(createUserDto: CreateUserDto, file) {;
     
-    const arr =  file.path.split('/');
-    arr.splice(0, 1);
+    // const user = await this.userRepo.findOne({
+    //   email: createUserDto.email
+    // })
 
-    const token = await bcrypt.hash(`full-stack-token-${createUserDto.email}`, 10);
-    const newDto = {
-      ...createUserDto,
-      password: await bcrypt.hash('abc', 10),
-      avatar: arr.join('/'),
-      active: false,
-      token: token,
-      tokenExpired: new Date(Date.now() + (1000 * 60 * 30))
-    }
-    const newUser = await this.userRepo.create(newDto);
+    // if(user) {
+    //   throw new BadRequestException({
+    //     "message": "email registered"
+    //   })
+    // }
+    
+    // const arr =  file.path.split('/');
+    // arr.splice(0, 1);
 
-    const userx = await this.userRepo.save(newUser);
-    await this.mailService.sendUserConfirmation(userx, token);
-    return userx;
+    // const token = await bcrypt.hash(`full-stack-token-${createUserDto.email}`, 10);
+    // const newDto = {
+    //   ...createUserDto,
+    //   password: await bcrypt.hash('abc', 10),
+    //   avatar: arr.join('/'),
+    //   active: false,
+    //   token: token,
+    //   tokenExpired: new Date(Date.now() + (1000 * 60 * 30))
+    // }
+    // const newUser = await this.userRepo.create(newDto);
+
+    // const userx = await this.userRepo.save(newUser);
+    // await this.mailService.sendUserConfirmation(userx, token);
+    // return userx;
   }
 
   findAll() {

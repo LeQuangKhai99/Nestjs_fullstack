@@ -9,11 +9,15 @@ import { Public } from 'src/common/decorators/public.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { customFileName } from 'src/common/custom-file-name';
+import { S3ManagerService } from 'src/s3/s3-manager.service';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly s3ManagerService: S3ManagerService
+  ) {}
 
   @Get('/employees')
   employees(@Req() req) {
@@ -39,7 +43,11 @@ export class UsersController {
       }),
     })
   )
-  create(@Body() createUserDto: CreateUserDto, @UploadedFile() file) {
+  create(@Body() createUserDto: CreateUserDto, @UploadedFile() file: Express.Multer.File,@Req() req) {
+    const arr =  file.path.split('/');
+    arr.splice(0, 1);
+    const path = arr.join('/');
+    this.s3ManagerService.upload("a.txt", 'khai', 'demo-bucket');
     return this.usersService.create(createUserDto, file);
   }
 

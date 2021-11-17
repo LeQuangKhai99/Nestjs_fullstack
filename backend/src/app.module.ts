@@ -16,6 +16,9 @@ import { ArticlesModule } from './articles/articles.module';
 import { CaslModule } from './casl/casl.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AwsSdkModule } from 'nest-aws-sdk';
+import { SharedIniFileCredentials, S3 } from 'aws-sdk';
+import { S3ManagerModule } from './s3/s3-manager.module';
 
 @Module({
   controllers: [AppController],
@@ -31,6 +34,20 @@ import { join } from 'path';
     }
   ],
   imports: [
+    S3ManagerModule,
+    AwsSdkModule.forRootAsync({
+      defaultServiceOptions: {
+        useValue: {
+          region: 'us-east-1',
+          credentials: new SharedIniFileCredentials({
+            profile: 'my-profile',
+          }),
+          accessKeyId: 'khai',
+          secretAccessKey: 'khai'
+        }
+      },
+      services: [S3]
+    }),
     ConfigModule.forRoot(),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
